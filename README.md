@@ -3,7 +3,7 @@
 
 Распространяется проект на условиях лицензии Апач 2.0
 
-Copyright 2017 Andrey S. Ionisyan (anserion@gmail.com)
+Copyright 2019 Andrey S. Ionisyan (anserion@gmail.com)
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
