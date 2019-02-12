@@ -1,5 +1,6 @@
 # APMEFIL_ax309
 Аппартная реализация адаптивного медианного фильтра на базе FPGA Development board ALINX ax309
+(Hardware design of adaptive median filter over FPGA development board ALINX ax309)
 
 Распространяется проект на условиях лицензии Апач 2.0
 
