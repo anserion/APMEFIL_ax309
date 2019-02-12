@@ -28,18 +28,21 @@ entity keys_supervisor is
       key : in std_logic_vector(3 downto 0);
       key_rst: in std_logic;
       noise  : out std_logic_vector(31 downto 0);
-      radius : out std_logic_vector(31 downto 0)
+      radius : out std_logic_vector(31 downto 0);
+      video_out: out std_logic
 	);
 end keys_supervisor;
 
 architecture ax309 of keys_supervisor is
    signal fsm: natural range 0 to 7 := 0;
    signal debounce_cnt: natural range 0 to 1023 :=0;
-   signal noise_reg: std_logic_vector(31 downto 0):=conv_std_logic_vector(30,32);
+   signal noise_reg: std_logic_vector(31 downto 0):=conv_std_logic_vector(20,32);
    signal radius_reg: std_logic_vector(31 downto 0):=conv_std_logic_vector(1,32);
+   signal video_out_reg: std_logic:='0';
 begin
    noise<=noise_reg;
    radius<=radius_reg;
+   video_out<=video_out_reg;
    process(clk)
    begin
       if rising_edge(clk) and en='1' then
@@ -66,8 +69,9 @@ begin
             if (key(2)='0')and(radius_reg>=1)then radius_reg<=radius_reg-1;end if;
             if (key(3)='0')and(radius_reg<=1)then radius_reg<=radius_reg+1;end if;
             if key_rst='0' then
-               noise_reg<=conv_std_logic_vector(30,32);
-               radius_reg<=conv_std_logic_vector(1,32);
+               video_out_reg<=not(video_out_reg);
+               --noise_reg<=conv_std_logic_vector(20,32);
+               --radius_reg<=conv_std_logic_vector(1,32);
             end if;
             fsm<=3;
          -- wait for release all control keys

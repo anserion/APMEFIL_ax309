@@ -23,16 +23,16 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use ieee.std_logic_unsigned.all;
 
 entity rnd16_module is
+    Generic (seed:STD_LOGIC_VECTOR(31 downto 0));
     Port ( 
       clk: in  STD_LOGIC;
-      seed : in STD_LOGIC_VECTOR(31 downto 0);
       rnd16: out STD_LOGIC_VECTOR(15 downto 0)
 	 );
 end rnd16_module;
 
 architecture ax309 of rnd16_module is
    signal fsm: natural range 0 to 1 := 0;
-   signal rnd_reg: std_logic_vector(31 downto 0):=(others=>'0');
+   signal rnd_reg: std_logic_vector(31 downto 0):=seed;
    signal new_bit: std_logic:='0';
 begin
    rnd16<=rnd_reg(15 downto 0);
@@ -45,11 +45,7 @@ begin
    process(clk)
    begin
 		if rising_edge(clk) then
-        case fsm is
-        when 0=> rnd_reg<=seed; fsm<=1;
-        when 1=> rnd_reg<=new_bit & rnd_reg(31 downto 1);
-        when others => null;
-        end case;
+         rnd_reg<=new_bit & rnd_reg(31 downto 1);
 		end if;
 	end process;
 end ax309;

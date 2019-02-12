@@ -187,9 +187,9 @@ begin
    msg5_chip: msg_box
    port map (
       clk => clk,
-      x => conv_std_logic_vector(0,8),
-      y => conv_std_logic_vector(0,8),
-      msg => string_to_std_logic_vector("        "),
+      x => conv_std_logic_vector(18,8),
+      y => conv_std_logic_vector(16,8),
+      msg => string_to_std_logic_vector("SMF(old)"),
       char_x => msg5_char_x,
       char_y => msg5_char_y,
       char_code => msg5_char
@@ -199,9 +199,9 @@ begin
    msg6_chip: msg_box
    port map (
       clk => clk,
-      x => conv_std_logic_vector(18,8),
+      x => conv_std_logic_vector(35,8),
       y => conv_std_logic_vector(16,8),
-      msg => string_to_std_logic_vector("ADAPTIVE"),
+      msg => string_to_std_logic_vector("AMF(new)"),
       char_x => msg6_char_x,
       char_y => msg6_char_y,
       char_code => msg6_char
@@ -210,9 +210,9 @@ begin
    msg7_chip: msg_box
    port map (
       clk => clk,
-      x => conv_std_logic_vector(27,8),
-      y => conv_std_logic_vector(16,8),
-      msg => string_to_std_logic_vector(" MEDIAN "),
+      x => conv_std_logic_vector(0,8),
+      y => conv_std_logic_vector(0,8),
+      msg => string_to_std_logic_vector("        "),
       char_x => msg7_char_x,
       char_y => msg7_char_y,
       char_code => msg7_char
@@ -221,9 +221,9 @@ begin
    msg8_chip: msg_box
    port map (
       clk => clk,
-      x => conv_std_logic_vector(35,8),
-      y => conv_std_logic_vector(16,8),
-      msg => string_to_std_logic_vector(" FILTER "),
+      x => conv_std_logic_vector(0,8),
+      y => conv_std_logic_vector(0,8),
+      msg => string_to_std_logic_vector("        "),
       char_x => msg8_char_x,
       char_y => msg8_char_y,
       char_code => msg8_char

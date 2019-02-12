@@ -9,9 +9,6 @@ PIN "clocking_chip/clkout4_buf.O" CLOCK_DEDICATED_ROUTE = FALSE;
 PIN "clocking_chip/clkout5_buf.O" CLOCK_DEDICATED_ROUTE = FALSE;
 #PIN "clocking_chip/clkout6_buf.O" CLOCK_DEDICATED_ROUTE = FALSE;
 
-##  Buzzer output
-#NET buzzer            LOC = J11 | IOSTANDARD = "LVCMOS33";
-
 #CMOS OV7670
 NET "OV7670_PWDN"    LOC = "F14"  | IOSTANDARD="LVCMOS33";
 NET "OV7670_RESET"   LOC = "E12" | IOSTANDARD="LVCMOS33";
@@ -72,6 +69,26 @@ NET "lcd_red<7>"        LOC = N16  | IOSTANDARD="LVCMOS33";
 NET "lcd_hsync"         LOC = R5  | IOSTANDARD="LVCMOS33";
 NET "lcd_vsync"         LOC = R1  | IOSTANDARD="LVCMOS33";
 NET "lcd_dclk"          LOC = T4  | IOSTANDARD="LVCMOS33";
+
+#VGA
+NET "vga_blue<0>"       LOC = P7  | IOSTANDARD="LVCMOS33";
+NET "vga_blue<1>"       LOC = M7  | IOSTANDARD="LVCMOS33";
+NET "vga_blue<2>"       LOC = P8 | IOSTANDARD="LVCMOS33";
+NET "vga_blue<3>"       LOC = N8 | IOSTANDARD="LVCMOS33";
+NET "vga_blue<4>"       LOC = L7 | IOSTANDARD="LVCMOS33";
+NET "vga_green<0>"      LOC = M9 | IOSTANDARD="LVCMOS33";
+NET "vga_green<1>"      LOC = N9 | IOSTANDARD="LVCMOS33";
+NET "vga_green<2>"      LOC = P9 | IOSTANDARD="LVCMOS33";
+NET "vga_green<3>"      LOC = L10 | IOSTANDARD="LVCMOS33";
+NET "vga_green<4>"      LOC = M10 | IOSTANDARD="LVCMOS33";
+NET "vga_green<5>"      LOC = P11 | IOSTANDARD="LVCMOS33";
+NET "vga_red<0>"        LOC =  M11 | IOSTANDARD="LVCMOS33";
+NET "vga_red<1>"        LOC =  M12 | IOSTANDARD="LVCMOS33";
+NET "vga_red<2>"        LOC =  L12 | IOSTANDARD="LVCMOS33";
+NET "vga_red<3>"        LOC =  N14 | IOSTANDARD="LVCMOS33";
+NET "vga_red<4>"        LOC =  M13 | IOSTANDARD="LVCMOS33";
+NET "vga_hsync"         LOC = M14  | IOSTANDARD="LVCMOS33";
+NET "vga_vsync"         LOC = L13  | IOSTANDARD="LVCMOS33";
 
 #SDRAM
 NET "Sdram_CLK_ucf"    LOC =  H4 | IOSTANDARD = "LVCMOS33";        ## SDRAM CLOCK

@@ -14,41 +14,43 @@
 ----------------------------------------------------------------------------------
 -- Engineer: Andrey S. Ionisyan <anserion@gmail.com>
 -- 
--- Description: Controller 480x272 LCD AN430 (TM043NBH02 panel)
+-- Description: VGA Controller 640x480_16bpp (5_Red,6_Green,5_Blue)
+--  
 ----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use ieee.std_logic_unsigned.all;
 
-entity lcd_AN430 is
+entity vga is
     Port (
-      en      : in std_logic;
-		clk     : in  STD_LOGIC;
-		red     : out STD_LOGIC_VECTOR(7 downto 0);
-		green   : out STD_LOGIC_VECTOR(7 downto 0);
-		blue    : out STD_LOGIC_VECTOR(7 downto 0);
-		hsync   : out STD_LOGIC;
-		vsync   : out STD_LOGIC;
-		de      : out STD_LOGIC;
-		x       : out STD_LOGIC_VECTOR(9 downto 0);
-		y       : out STD_LOGIC_VECTOR(9 downto 0);
+      en    : in std_logic;
+		clk   : in  STD_LOGIC;
+		red   : out STD_LOGIC_VECTOR(4 downto 0);
+		green : out STD_LOGIC_VECTOR(5 downto 0);
+		blue  : out STD_LOGIC_VECTOR(4 downto 0);
+		hsync : out STD_LOGIC;
+		vsync : out STD_LOGIC;
+      de    : out STD_LOGIC;
+		x     : out STD_LOGIC_VECTOR(9 downto 0);
+		y     : out STD_LOGIC_VECTOR(9 downto 0);
       dirty_x : out STD_LOGIC_VECTOR(9 downto 0);
       dirty_y : out STD_LOGIC_VECTOR(9 downto 0);
-      pixel   : in STD_LOGIC_VECTOR(23 downto 0);
+		pixel :  in STD_LOGIC_VECTOR(15 downto 0);
 		char_x    : out STD_LOGIC_VECTOR(6 downto 0);
 		char_y	 : out STD_LOGIC_VECTOR(4 downto 0);
 		char_code : in  STD_LOGIC_VECTOR(7 downto 0)
 	 );
-end lcd_AN430;
+end vga;
 
-architecture ax309 of lcd_AN430 is
+architecture Behavioral of vga is
    component rom_vgafont
    Port ( 
-		clk       : in STD_LOGIC;
-		en        : in STD_LOGIC;
-		addr      : in STD_LOGIC_VECTOR(11 downto 0);
-		data      : out STD_LOGIC_VECTOR(7 downto 0)
+		clk  : in STD_LOGIC;
+		en   : in STD_LOGIC;
+		addr : in STD_LOGIC_VECTOR(11 downto 0);
+		data : out STD_LOGIC_VECTOR(7 downto 0)
 	 );
    end component;
 
@@ -57,8 +59,8 @@ architecture ax309 of lcd_AN430 is
       n: natural range 1 to 10:=10;
       x_min: natural range 0 to 1023:=0;
       y_min: natural range 0 to 1023:=0;
-      x_max: natural range 0 to 1023:=479;
-      y_max: natural range 0 to 1023:=271
+      x_max: natural range 0 to 1023:=639;
+      y_max: natural range 0 to 1023:=479
    );
    Port ( 
 		clk   : in  STD_LOGIC;
@@ -68,19 +70,18 @@ architecture ax309 of lcd_AN430 is
       y     : out std_logic_vector (n-1 downto 0)
 	 );
    end component;
-
-   -- Timing constants
-   constant hStartSync : natural := 43;
-   constant hStartWin  : natural := hStartSync+30;
-   constant hEndWin    : natural := hStartWin+480;
-   constant hEndSync   : natural := hStartSync+525;
-   constant hMaxCount  : natural := 600;
+   
+   constant hStartSync : natural := 16;
+   constant hStartWin  : natural := hStartSync+52;
+   constant hEndWin    : natural := hStartWin+640;
+   constant hEndSync   : natural := hEndWin+48;
+   constant hMaxCount  : natural := 800;
 	
-   constant vStartSync : natural := 12;
-   constant vStartWin  : natural := vStartSync+3;
-   constant vEndWin    : natural := vStartWin+272;
-   constant vEndSync   : natural := vStartSync+280;
-   constant vMaxCount  : natural := 300;
+   constant vStartSync : natural := 10;
+   constant vStartWin  : natural := vStartSync+10;
+   constant vEndWin    : natural := vStartWin+480;
+   constant vEndSync   : natural := vEndWin+20;
+   constant vMaxCount  : natural := 525;
 	
    signal hCounter   : std_logic_vector(9 downto 0) := (others => '0');
    signal vCounter   : std_logic_vector(9 downto 0) := (others => '0');
@@ -93,7 +94,6 @@ architecture ax309 of lcd_AN430 is
    signal vWin_de: std_logic := '1';
 	signal reg_de     : std_logic := '1';
 	signal char_line  : std_logic_vector(7 downto 0);
-   
 begin
    next_x<=reg_x+2;
    char_x<=next_x(9 downto 3);
@@ -128,7 +128,7 @@ begin
       x     => reg_x,
       y     => reg_y
 	 );
-   
+    
    hSync<=reg_hSync;
    vSync<=reg_vSync;
 	x <= reg_x when reg_de='1' else (others=>'0');
@@ -142,22 +142,26 @@ begin
    begin
 		if rising_edge(clk) then
        if en='1' then
-			if reg_de = '1' then
+			if reg_de='1' then
 				if char_line(7-conv_integer(reg_x(2 downto 0)))='1' then
 					blue  <= (others=>'1');
 					green <= (others=>'1');
 					red   <= (others=>'1');
 				else
-					blue  <= pixel(23 downto 16);
-					green <= pixel(15 downto 8);
-					red   <= pixel(7 downto 0);
+               blue  <= pixel(15 downto 11);
+               green <= pixel(10 downto 5);
+               red   <= pixel(4 downto 0);
+               
+--					blue  <= pixel(7 downto 3);
+--					green <= pixel(7 downto 2);
+--					red   <= pixel(7 downto 3);
 				end if;
 			else
 				red   <= (others => '0');
 				green <= (others => '0');
 				blue  <= (others => '0');
 			end if;
-	
+
 			if vCounter=vStartSync then reg_vSync <= '0';
          elsif vCounter=vEndSync then reg_vSync <= '1';
          end if;
@@ -185,4 +189,4 @@ begin
        end if;
 		end if;
 	end process;
-end ax309;
+end Behavioral;
